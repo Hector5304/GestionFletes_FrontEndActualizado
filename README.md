@@ -10,6 +10,8 @@ python -m venv nombre_del_entorno
 
 nombre_del_entorno\Scripts\Activate
 
+.\.venv\Scripts\Activate.ps1; where.exe python; python -V; where.exe pip; pip --version; pip list --format=columns
+
 # PIP Necesarios para que funcione
 
 pip install django

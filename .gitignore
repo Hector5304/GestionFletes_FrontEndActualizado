@@ -1,3 +1,52 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# C extensions
+*.so
+
+# Distribution / packaging
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+*.egg-info/
+installdata/
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Virtual environments
+.venv/
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# Django stuff:
+*.log
+local_settings.py
+db.sqlite3
+db.sqlite3-journal
+
+# VS Code
+.vscode/
+
+# JetBrains
+.idea/
+
+# OS files
+.DS_Store
+Thumbs.db
 # Directorio virtual de entorno (puede variar según el nombre de tu entorno virtual)
 venv/
 ven/
