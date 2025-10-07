@@ -66,4 +66,4 @@ def balance(request):
         'egresos_por_mes': list(egresos_por_mes.values()),
         'meses_labels': list(ingresos_por_mes.keys()),
     })
-    return render(request, 'Dashboard.html', context)
+    return render(request, 'Balance.html', context)

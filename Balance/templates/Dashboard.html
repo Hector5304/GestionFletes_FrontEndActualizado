@@ -3,6 +3,20 @@
 {% block tittle %}Dashboard de Logística{% endblock %}
 
 {% block body %}
-  <!-- Intencionalmente vacío por ahora: solo se muestra la barra lateral -->
-  <div style="min-height:60vh;"></div>
+  <div class="container mt-5">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="card">
+          <div class="card-body text-center p-5">
+            <h2 class="mb-4">Bienvenido al Sistema de Gestión de Fletes</h2>
+            <p class="lead mb-4">Esta es la página principal del dashboard.</p>
+            <p class="text-muted mb-4">Para ver el balance financiero y estadísticas, visita la sección de Balance.</p>
+            <a href="{% url 'balance' %}" class="btn btn-primary btn-lg">
+              <i class="bi bi-graph-up"></i> Ver Balance
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 {% endblock %}

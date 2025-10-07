@@ -1,52 +1,124 @@
-{% extends "Base.html" %}
-
-{% block tittle%}Balance{% endblock %}
-
 {% extends "partials/gestion_layout.html" %}
+{% load static %}
+
+{% block tittle %}Balance{% endblock %}
 
 {% block gestion_header %}
     <div class="d-flex align-items-start mb-3">
         <div>
-            <h2 class="mb-0">Balance</h2>
+            <h2 class="mb-0">Balance General</h2>
         </div>
     </div>
 {% endblock %}
 
 {% block gestion_body %}
-        <div class="row">
-            <div class='col-md-6 mb-3'>
-                <div class='card p-3'>
-                    <h5>Balance</h5>
-                    <canvas id="myBarChart"></canvas>
-                </div>
-            </div>
-            <div class='col-md-6 mb-3'>
-                <div class='card p-3'>
-                    <h5>Vehiculos Disponibles</h5>
-                    <canvas id="a"></canvas>
-                </div>
+    <div class="row mb-3">
+        <div class='col-md-6 mb-3'>
+            <div class='card p-3'>
+                <h5>Balance Financiero</h5>
+                <canvas id="myBarChart"></canvas>
             </div>
         </div>
+        <div class='col-md-6 mb-3'>
+            <div class='card p-3'>
+                <h5>Estado de Vehículos</h5>
+                <canvas id="vehiculosChart"></canvas>
+            </div>
+        </div>
+    </div>
 
-        <script>
-            document.addEventListener('DOMContentLoaded', function () {
-                var ingresosTotales = {{ total_ingresos }}
-                var egresosTotales = {{ total_egresos }}
-                var saldoTotal = {{ saldo_total }}
-                var data = {
-                    labels: ['Ingresos total', 'Egresos total', 'Beneficios total'],
-                    datasets: [{ label: 'Balance Flete', data: [ingresosTotales, egresosTotales, saldoTotal], backgroundColor: ['#10b981', '#ef4444', '#3b82f6'] }]
-                };
-                var ctx = document.getElementById('myBarChart').getContext('2d');
-                new Chart(ctx, { type: 'bar', data: data, options: {} });
+    <div class="row">
+        <div class='col-md-12'>
+            <div class='card p-3'>
+                <h5>Ingresos y Egresos Mensuales</h5>
+                <canvas id="monthlyChart"></canvas>
+            </div>
+        </div>
+    </div>
+{% endblock %}
 
-                var vehiculosInactivos = {{ vehiculos_inactivos }};
-                var vehiculosActivos = {{ vehiculos_activos }};
-                var data2 = { labels: ['Vehiculos Inactivos', 'Vehiculos activos'], datasets: [{ data: [vehiculosInactivos, vehiculosActivos], backgroundColor: ['#9ca3af', '#10b981'] }] };
-                var ctx2 = document.getElementById('a').getContext('2d');
-                new Chart(ctx2, { type: 'pie', data: data2, options: {} });
+{% block gestion_after %}
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Gráfico de Balance Financiero
+            var ctxBar = document.getElementById('myBarChart').getContext('2d');
+            new Chart(ctxBar, {
+                type: 'bar',
+                data: {
+                    labels: ['Ingresos Total', 'Egresos Total', 'Beneficios Total'],
+                    datasets: [{
+                        label: 'Balance Flete',
+                        data: [{{ total_ingresos }}, {{ total_egresos }}, {{ saldo_total }}],
+                        backgroundColor: ['#10b981', '#ef4444', '#3b82f6']
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: true,
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
             });
-        </script>
-    {% endblock %}
 
+            // Gráfico de Estado de Vehículos
+            var ctxVehiculos = document.getElementById('vehiculosChart').getContext('2d');
+            new Chart(ctxVehiculos, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Vehículos Inactivos', 'Vehículos Activos'],
+                    datasets: [{
+                        data: [{{ vehiculos_inactivos }}, {{ vehiculos_activos }}],
+                        backgroundColor: ['#9ca3af', '#10b981']
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: true
+                }
+            });
+
+            // Gráfico de Ingresos y Egresos Mensuales
+            var ctxMonthly = document.getElementById('monthlyChart').getContext('2d');
+            new Chart(ctxMonthly, {
+                type: 'line',
+                data: {
+                    labels: {{ meses_labels|safe }},
+                    datasets: [{
+                        label: 'Ingresos',
+                        data: {{ ingresos_por_mes|safe }},
+                        borderColor: '#10b981',
+                        backgroundColor: 'rgba(16, 185, 129, 0.1)',
+                        fill: true,
+                        tension: 0.4
+                    }, {
+                        label: 'Egresos',
+                        data: {{ egresos_por_mes|safe }},
+                        borderColor: '#ef4444',
+                        backgroundColor: 'rgba(239, 68, 68, 0.1)',
+                        fill: true,
+                        tension: 0.4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: true,
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            display: true,
+                            position: 'top'
+                        }
+                    }
+                }
+            });
+        });
+    </script>
 {% endblock %}
