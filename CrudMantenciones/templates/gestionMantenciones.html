@@ -1,0 +1,69 @@
+{% extends "partials/gestion_layout.html" %}
+
+{% load widget_tweaks %}
+
+{% block tittle%}Gestion de Mantenciones{% endblock %}
+
+{% block gestion_header %}
+        <div class="d-flex align-items-start mb-3">
+            <div>
+                <h2 class="mb-0">Gestion de Mantenciones</h2>
+            </div>
+            <div class="ms-auto">
+                <button form="mantencionesForm" type="submit" class="btn btn-primary">Guardar</button>
+            </div>
+        </div>
+{% endblock %}
+
+{% block gestion_body %}
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-dismissible alert-success"><strong class="text-dark"> {{message}}</strong></div>
+            {% endfor %}
+        {% endif %}
+
+        <form id="mantencionesForm" action="{% url 'registrarMantenciones' %}" method="post">
+            {% csrf_token %}
+            <div class="mb-3">{{ form.vehiculo.label_tag }}{% render_field form.vehiculo class="form-control" %}</div>
+            <div class="mb-3">{{ form.fechaInicio.label_tag }}{% render_field form.fechaInicio class="form-control" type="date" %}</div>
+            <div class="mb-3">{{ form.duracion.label_tag }}{% render_field form.duracion class="form-control" %}</div>
+            <div class="mb-3">{{ form.valor.label_tag }}{% render_field form.valor class="form-control" %}</div>
+        </form>
+    {% endblock %}
+
+    {% block gestion_after %}
+        <h5>Listado De Mantenciones</h5>
+        <div class="table responsive py-2">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Vehiculo</th>
+                        <th>Fecha de Mantencion</th>
+                        <th>Duracion (Dias)</th>
+                        <th>Costo (Pesos CLP)</th>
+                        <th colspan="2">Opciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for mantencion in mantenciones %}
+                        <tr>
+                            <td>{{mantencion.mantencionID}}</td>
+                            <td>{{mantencion.vehiculo.marca}} {{mantencion.vehiculo.patente}} {{mantencion.vehiculo.modelo}}</td>
+                            <td>{{mantencion.fechaInicio}}</td>
+                            <td>{{mantencion.duracion}}</td>
+                            <td>${{mantencion.valor}}</td>
+                            <td><a href="{% url 'editarMantenciones' mantencion.mantencionID %}" class="btn btn-sm btn-outline-primary">Editar</a></td>
+                            <td><a href="{% url 'eliminarMantenciones' mantencion.mantencionID %}" class="btn btn-sm btn-outline-danger btnEliminacion">Eliminar</a></td>
+                        </tr>
+                    {% empty %}
+                        <tr><td colspan="8">No mantenciones registradas.</td></tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% endblock %}
+
+    <ul class="nav flex-column">
+    <li class="nav-item mb-2"><a class="nav-link" href="{% url 'home' %}">Home</a></li>
+    </ul>

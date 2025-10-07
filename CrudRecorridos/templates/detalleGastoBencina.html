@@ -1,0 +1,38 @@
+{% extends "partials/gestion_layout.html" %}
+{% block tittle %}Detalle de Gasto de Bencina{% endblock %}
+{% block gestion_header %}
+    <h2>Gasto de Bencina del Recorrido</h2>
+{% endblock %}
+{% block gestion_body %}
+    <div class="card mb-3">
+        <div class="card-body">
+            <h5 class="card-title">Conductor: {{ recorrido.conductor.nombre }}</h5>
+            <p class="card-text">Vehículo: {{ recorrido.vehiculo.patente }}</p>
+            <p class="card-text">Tipo de bencina: {{ recorrido.vehiculo.tipo_bencina }}</p>
+            <p class="card-text">Rendimiento (km/l): {{ recorrido.vehiculo.rendimiento }}</p>
+            <p class="card-text">Distancia recorrida (km): {{ recorrido.distancia_km }}</p>
+            <p class="card-text">Precio bencina utilizada: ${{ precio_bencina }}</p>
+            <p class="card-text">Gasto estimado de bencina: ${{ gasto_bencina }}</p>
+        </div>
+    </div>
+    <h5>Precios actuales de todas las bencinas</h5>
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Tipo de bencina</th>
+                <th>Precio ($)</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for tipo, precio in precios_bencina.items %}
+            <tr>
+                <td>{{ tipo }}</td>
+                <td>${{ precio }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}
+{% block gestion_after %}
+    <a href="{% url 'registrarRecorridos' %}" class="btn btn-secondary">Volver a la gestión de recorridos</a>
+{% endblock %}

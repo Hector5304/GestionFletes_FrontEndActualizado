@@ -1,0 +1,26 @@
+{% extends "partials/gestion_layout.html" %}
+
+{% load widget_tweaks %}
+
+{% block tittle %}Gestion de Mantenciones{% endblock %}
+
+{% block gestion_header %}
+        <div class="d-flex align-items-start mb-3">
+            <div>
+                <h2 class="mb-0">Editar Mantencion</h2>
+            </div>
+            <div class="ms-auto">
+                <button form="editarMantForm" type="submit" class="btn btn-primary">Guardar</button>
+            </div>
+        </div>
+{% endblock %}
+
+{% block gestion_body %}
+        <form id="editarMantForm" action="{% url 'editarMantenciones' mantencionID %}" method="post">
+            {% csrf_token %}
+            <div class="mb-3">{{ form.vehiculo.label_tag }}{% render_field form.vehiculo class="form-control" %}</div>
+            <div class="mb-3">{{ form.fechaInicio.label_tag }}{% render_field form.fechaInicio class="form-control"  type="date" %}</div>
+            <div class="mb-3">{{ form.duracion.label_tag }}{% render_field form.duracion class="form-control" %}</div>
+            <div class="mb-3">{{ form.valor.label_tag }}{% render_field form.valor class="form-control" %}</div>
+        </form>
+    {% endblock %}

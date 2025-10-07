@@ -1,0 +1,36 @@
+{% extends "Base.html" %}
+{% load static %}
+
+{% block body %}
+  <div class="row g-0" style="min-height:70vh;">
+    {% if show_dealertouch %}
+      <div class="col-12 col-md-2 bg-light border-end" style="min-height:70vh; padding:12px;">
+        <div class="mb-3">
+          <h5>Dealertouch</h5>
+        </div>
+        <ul class="nav flex-column small">
+          <li class="nav-item mb-2"><a class="nav-link" href="#">Home</a></li>
+          <li class="nav-item mb-2"><a class="nav-link" href="#">Add New</a></li>
+          <li class="nav-item mb-2"><a class="nav-link" href="#">List</a></li>
+          <li class="nav-item mb-2"><a class="nav-link" href="#">Reports</a></li>
+        </ul>
+        <div class="card mt-3 p-2" style="background:#fff9e6;">
+          <small class="text-muted">Unlock More Features</small>
+          <p class="mb-1 small">Advanced features like enhanced analytics, AI insights, etc.</p>
+          <div class="d-grid">
+            <a class="btn btn-outline-dark btn-sm" href="#">Compare Plan Details</a>
+          </div>
+        </div>
+      </div>
+      <div class="col-12 col-md-10 p-3">
+    {% else %}
+      <div class="col-12 p-3">
+    {% endif %}
+      {% block gestion_header %}{% endblock %}
+      <div class="card p-4 mb-4">
+        {% block gestion_body %}{% endblock %}
+      </div>
+      {% block gestion_after %}{% endblock %}
+    </div>
+  </div>
+{% endblock %}

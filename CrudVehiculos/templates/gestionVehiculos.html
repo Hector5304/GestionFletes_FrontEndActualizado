@@ -1,0 +1,141 @@
+{% extends "Base.html" %}
+
+{% load widget_tweaks %}
+
+{% block tittle %}Add New Car{% endblock %}
+
+{% block body %}
+
+<div class="row g-0" style="min-height:70vh;">
+    <!-- Sidebar (simplificada) -->
+    <div class="col-12 col-md-3 bg-light border-end" style="min-height:70vh; padding:28px;">
+        <ul class="nav flex-column">
+            <li class="nav-item mb-2"><a class="nav-link" href="{% url 'home' %}">Home</a></li>
+            <li class="nav-item mb-2"><a class="nav-link active" href="#">Agregar Vehículo</a></li>
+            <li class="nav-item mb-2"><a class="nav-link" href="#">Lista de Vehículos</a></li>
+        </ul>
+    </div>
+
+    <!-- Main -->
+    <div class="col-12 col-md-9 p-4">
+        <div class="d-flex align-items-start mb-3">
+            <div>
+                <h2 class="mb-0">Add New Car</h2>
+                <small class="text-muted">Enter car details and upload photos to add a new vehicle to your inventory.</small>
+            </div>
+            <div class="ms-auto">
+                <a href="#" class="btn btn-light me-2">Cancel</a>
+                <button form="vehiculoForm" type="submit" class="btn btn-primary">Save</button>
+            </div>
+        </div>
+
+        <div class="card p-4 mb-4">
+            <form id="vehiculoForm" action="{% url 'registarVehiculos' %}" method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="mb-3 row">
+                    <label class="col-sm-2 col-form-label">Patente</label>
+                    <div class="col-sm-6">
+                        {% render_field form.patente class="form-control" placeholder="AA-229-DB" %}
+                        {{ form.patente.errors }}
+                    </div>
+                </div>
+
+                <div class="mb-3 row">
+                    <label class="col-sm-2 col-form-label">Fecha de Adquisición</label>
+                    <div class="col-sm-4">
+                        {% render_field form.fechaAdquisicion class="form-control" type="date" %}
+                        {{ form.fechaAdquisicion.errors }}
+                    </div>
+                    <label class="col-sm-2 col-form-label">Modelo</label>
+                    <div class="col-sm-4">
+                        {% render_field form.modelo class="form-control" %}
+                        {{ form.modelo.errors }}
+                    </div>
+                </div>
+
+                        <div class="mb-3 row">
+                            <label class="col-sm-2 col-form-label">Marca</label>
+                            <div class="col-sm-4">
+                                {% render_field form.marca class="form-control" %}
+                                {{ form.marca.errors }}
+                            </div>
+                            <label class="col-sm-2 col-form-label">Estado</label>
+                            <div class="col-sm-4">
+                                {% render_field form.estado class="form-control" %}
+                                {{ form.estado.errors }}
+                            </div>
+                        </div>
+
+                        <div class="mb-3 row">
+                            <label class="col-sm-2 col-form-label">Comentarios</label>
+                            <div class="col-sm-10">
+                                {% render_field form.comentario class="form-control" %}
+                                {{ form.comentario.errors }}
+                            </div>
+                        </div>
+
+                <div class="mb-3 row">
+                    <label class="col-sm-2 col-form-label">Upload Photos</label>
+                    <div class="col-sm-10">
+                        <div class="border rounded p-4 d-flex align-items-center justify-content-center" style="min-height:160px; background:#fafafa;">
+                            <div class="text-center text-muted">
+                                <p>Click to upload or drag and drop</p>
+                                <small>PNG, JPG or JPEG (max. 800x400px)</small>
+                                <div class="mt-2">
+                                    <input type="file" name="images" multiple class="form-control form-control-sm" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Hidden actual submit handled by top Save button; also keep visible Save at bottom for accessibility -->
+                <div class="d-flex justify-content-end mt-3">
+                    <button type="submit" class="btn btn-primary">Save</button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Existing list moved below -->
+        <div class="card p-3">
+            <h5>Car List</h5>
+            <div class="table-responsive py-2">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Patente</th>
+                            <th>Marca</th>
+                            <th>Modelo</th>
+                            <th>Fecha Adquisicion</th>
+                            <th>Estado</th>
+                            <th>Comentarios</th>
+                            <th colspan="2">Opciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for vehiculo in vehiculos %}
+                        <tr>
+                            <td>{{ vehiculo.vehiculoID }}</td>
+                            <td>{{ vehiculo.patente }}</td>
+                            <td>{{ vehiculo.marca }}</td>
+                            <td>{{ vehiculo.modelo }}</td>
+                            <td>{{ vehiculo.fechaAdquisicion }}</td>
+                            <td>{{ vehiculo.estado }}</td>
+                            <td>{{ vehiculo.comentario }}</td>
+                            <td><a href="{% url 'edicionVehiculos' vehiculo.vehiculoID %}" class="btn btn-sm btn-outline-primary">Edit</a></td>
+                            <td><a href="{% url 'eliminarVehiculos' vehiculo.vehiculoID %}" class="btn btn-sm btn-outline-danger btnEliminacion">Delete</a></td>
+                        </tr>
+                        {% empty %}
+                        <tr><td colspan="9">No vehicles found.</td></tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

@@ -1,0 +1,33 @@
+{% extends "partials/gestion_layout.html" %}
+
+{% load widget_tweaks %}
+
+{% block tittle%}Gestion de Egresos{% endblock %}
+
+{% block gestion_header %}
+        <div class="d-flex align-items-start mb-3">
+            <div>
+                <h2 class="mb-0">Editar Egreso</h2>
+            </div>
+            <div class="ms-auto">
+                <button form="editarEgresoForm" type="submit" class="btn btn-primary">Guardar</button>
+            </div>
+        </div>
+{% endblock %}
+
+{% block gestion_body %}
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-dismissible alert-success"><strong class="text-dark"> {{message}}</strong></div>
+            {% endfor %}
+        {% endif %}
+
+        <form id="editarEgresoForm" action="{% url 'editarEgresos' egresoID %}" method="post">
+            {% csrf_token %}
+            <div class="mb-3">{{ form.valor.label_tag }}{% render_field form.valor class="form-control" %}</div>
+            <div class="mb-3">{{ form.fecha.label_tag }}{% render_field form.fecha class="form-control" type="date" %}</div>
+            <div class="mb-3">{{ form.recorrido.label_tag }}{% render_field form.recorrido class="form-control" %}</div>
+            <div class="mb-3">{{ form.comentario.label_tag }}{% render_field form.comentario class="form-control" %}</div>
+        </form>
+    {% endblock %}
+

@@ -1,0 +1,53 @@
+{% extends "partials/gestion_layout.html" %}
+{% block tittle %}Detalle del Recorrido{% endblock %}
+{% block gestion_header %}
+    <h2>Detalle del Recorrido</h2>
+{% endblock %}
+{% block gestion_body %}
+    <div class="card mb-3">
+        <div class="card-body">
+            <h5 class="card-title">Conductor: {{ recorrido.conductor.nombre }}</h5>
+            <p class="card-text">Vehículo: {{ recorrido.vehiculo.patente }}</p>
+            <p class="card-text">Fecha: {{ recorrido.fecha }}</p>
+            <p class="card-text">Origen: {{ recorrido.direccionOrigen }}</p>
+            <p class="card-text">Destino: {{ recorrido.direccionDestino }}</p>
+            <p class="card-text">Carga: {{ recorrido.carga }}</p>
+            <p class="card-text">Detalle: {{ recorrido.detalle }}</p>
+            <p class="card-text">Distancia (km): {{ recorrido.distancia_km }}</p>
+        </div>
+    </div>
+    <h5>Ruta en Mapa</h5>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <div id="mapRecorrido" style="height:400px;width:100%;"></div>
+    <script>
+        try {
+            var gpsData = JSON.parse('{{ recorrido.gps_data|escapejs }}');
+            if (Array.isArray(gpsData) && gpsData.length > 0) {
+                var map = L.map('mapRecorrido').setView([gpsData[0][0], gpsData[0][1]], 13);
+                L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                    maxZoom: 18,
+                    attribution: '© OpenStreetMap'
+                }).addTo(map);
+                var latlngs = gpsData.map(function(coord) { return [coord[0], coord[1]]; });
+                var polyline = L.polyline(latlngs, {color: 'blue'}).addTo(map);
+                map.fitBounds(polyline.getBounds());
+                var startMarker = L.marker(latlngs[0]).addTo(map);
+                startMarker.bindPopup('Inicio del recorrido').openPopup();
+                var endMarker = L.marker(latlngs[latlngs.length-1]).addTo(map);
+                endMarker.bindPopup('Fin del recorrido');
+                polyline.on('click', function(e) {
+                    L.popup()
+                     .setLatLng(e.latlng)
+                     .setContent('Ruta del conductor')
+                     .openOn(map);
+                });
+            }
+        } catch (e) {
+            // Invalid GPS data
+        }
+    </script>
+{% endblock %}
+{% block gestion_after %}
+    <a href="{% url 'registrarRecorridos' %}" class="btn btn-secondary">Volver a la gestión de recorridos</a>
+{% endblock %}

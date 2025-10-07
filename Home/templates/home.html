@@ -1,0 +1,122 @@
+{% extends "Base.html" %}
+{% load static %}
+
+{% block tittle%}Home {% endblock %}
+
+{% block body %}
+
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h3>Dashboard</h3>
+  </div>
+
+  <div class="row kpi-row mb-4">
+    <div class="col-md-3">
+  <div class="card kpi-card-1">
+        <div class="card-body">
+          <small>Último Ingreso</small>
+          <h4>${{ ultimo_ingreso_val|default:0 }}</h4>
+          {% if ultimo_ingreso_fecha %}
+            <small class="text-muted">{{ ultimo_ingreso_fecha }}</small>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="card kpi-card-2">
+        <div class="card-body">
+          <small>Último Egreso</small>
+          <h4>${{ ultimo_egreso_val|default:0 }}</h4>
+          {% if ultimo_egreso_fecha %}
+            <small class="text-muted">{{ ultimo_egreso_fecha }}</small>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="card kpi-card-3">
+        <div class="card-body">
+          <small>Ingreso Semanal</small>
+          <h4>${{ ingresos_semana|default:0 }}</h4>
+          <small class="text-muted">Últimos 7 días</small>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="card kpi-card-4">
+        <div class="card-body">
+          <small>Egreso Semanal</small>
+          <h4>${{ egresos_semana|default:0 }}</h4>
+          <small class="text-muted">Últimos 7 días</small>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row g-3">
+    <div class="col-md-7">
+      <div class="card p-3 mb-3">
+        <h6 class="mb-3">Resumen Semanal</h6>
+        <div class="chart-wrapper" style="height:260px;"><canvas id="chartTrend"></canvas></div>
+      </div>
+
+      <div class="card p-3">
+        <h6 class="mb-3">Últimos Recorridos</h6>
+        <ul class="list-unstyled mb-0">
+          {% if recent_recorridos %}
+            {% for r in recent_recorridos %}
+              <li class="py-2 border-bottom d-flex justify-content-between align-items-center">
+                <div class="">
+                  <div class="fw-semibold">{{ r.conductor }}</div>
+                  <div class="small text-muted">{{ r.origen }} → {{ r.destino }}</div>
+                </div>
+                <div class="small text-muted text-end">{{ r.fecha }}</div>
+              </li>
+            {% endfor %}
+          {% else %}
+            <li class="py-2 text-muted">No hay recorridos recientes.</li>
+          {% endif %}
+        </ul>
+      </div>
+    </div>
+
+    <div class="col-md-5">
+      <div class="card p-3 mb-3 text-center">
+        <h6 class="mb-3">Sales</h6>
+        <div class="chart-wrapper small" style="height:200px;"><canvas id="chartDonut"></canvas></div>
+      </div>
+
+      <div class="card p-3">
+        <h6 class="mb-3">Transacciones</h6>
+        <ul class="list-unstyled small mb-0">
+          {% if recent_transactions %}
+            {% for t in recent_transactions %}
+              <li class="py-1 d-flex justify-content-between">
+                <div>
+                  <span class="fw-semibold">{{ t.tipo }}</span>
+                  <span class="text-muted"> — {{ t.recorrido }}</span>
+                </div>
+                <div class="text-end text-muted">${{ t.valor }}</div>
+              </li>
+            {% endfor %}
+          {% else %}
+            <li class="py-1 text-muted">No hay transacciones recientes.</li>
+          {% endif %}
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <script src="{% static 'js/dashboard.js' %}"></script>
+  <script>
+    (function(){
+      // Datos preparados en la vista: etiquetas y series para la última semana
+      var labels = {{ trend_labels|default:'[]'|safe }};
+      var ingresos = {{ trend_ingresos|default:'[]'|safe }};
+      var egresos = {{ trend_egresos|default:'[]'|safe }};
+
+      if(typeof renderTrendChart === 'function') renderTrendChart('chartTrend', labels, ingresos, egresos);
+      if(typeof renderDonutChart === 'function') renderDonutChart('chartDonut', [50,30,20], ['Direct','Affiliate','Referral']);
+    })();
+  </script>
+
+{% endblock %}

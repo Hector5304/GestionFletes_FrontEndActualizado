@@ -1,0 +1,78 @@
+th, td{
+    text-align: center;
+    vertical-align: middle;
+}
+
+:root {
+    --bg: #f4f5f7; /* page background */
+    --panel: #ffffff; /* cards */
+    --muted: #6b7280; /* text muted */
+    --accent-dark: #111827; /* dark gray (text) */
+    --sidebar-bg: #BFBDC1; /* requested sidebar background */
+    --accent: #e8c547; /* gold (kpi bright) */
+    --accent-2: #f59e0b; /* warm gold (kpi darker) */
+    --card-shadow: 0 8px 24px rgba(15,23,42,0.06);
+}
+
+body {
+    background-color: var(--bg);
+    color: var(--accent-dark);
+}
+
+/* Dashboard / panel styles */
+.bg-light {
+    background-color: #fbfbfc !important;
+}
+
+.card {
+    border: 0;
+    box-shadow: 0 6px 18px rgba(15, 23, 42, 0.06);
+    border-radius: 12px;
+}
+
+.nav-link.active {
+    background: transparent;
+    font-weight: 600;
+    color: var(--accent-dark) !important;
+}
+
+/* Upload area */
+.border.rounded.p-4 {
+    border-style: dashed !important;
+}
+
+/* Small responsive tweaks */
+@media (max-width: 768px){
+    .col-md-3{ padding:18px !important }
+}
+
+/* Form labels */
+.col-form-label{ font-weight:600 }
+
+/* Buttons */
+.btn-primary{ background: #2563eb; border-color:#2563eb }
+
+/* Table */
+.table-hover tbody tr:hover { background: rgba(37,99,235,0.04) }
+/* Dashboard specific styles */
+.dashboard-root{ align-items:flex-start }
+.app-sidebar{ background:var(--sidebar-bg); color:var(--panel); min-height:100vh; width:260px; position:fixed; left:0; top:0; padding:28px; border-right:1px solid rgba(255,255,255,0.03); }
+.app-sidebar .nav-link{ color:#0b1724; font-weight:600; padding:8px 10px; border-radius:8px }
+.app-sidebar .nav-link:hover{ background:rgba(255,255,255,0.08); color:#0b1724 }
+.app-sidebar .collapse .nav-link{ font-weight:500; padding-left:6px }
+.app-main{ margin-left:260px }
+
+/* KPI styling */
+.card.p-3 h4{ margin:0; font-weight:700 }
+
+/* Big KPI cards */
+.kpi-row .card{ border-radius:12px; padding:18px; }
+.kpi-card-1{ background:#111827; color:var(--panel) }
+.kpi-card-2{ background:#f3f4f6; color:var(--accent-dark) }
+.kpi-card-3{ background:var(--accent); color:var(--accent-dark) }
+.kpi-card-4{ background:#f5d38a; color:var(--accent-dark) }
+
+@media (max-width: 991px){
+    .dashboard-root{ flex-direction:column }
+    .sidebar{ width:100% }
+}

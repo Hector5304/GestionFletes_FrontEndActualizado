@@ -1,0 +1,103 @@
+{% extends "partials/gestion_layout.html" %}
+
+{% load widget_tweaks %}
+
+{% block tittle%}Gestion de Conductores {% endblock %}
+
+{% block gestion_header %}
+        <div class="d-flex align-items-start mb-3">
+            <div>
+                <h2 class="mb-0">Gestion de conductores</h2>
+            </div>
+            <div class="ms-auto">
+                <button form="conductorForm" type="submit" class="btn btn-primary">Guardar</button>
+            </div>
+        </div>
+{% endblock %}
+
+{% block gestion_body %}
+        {% if messages %}
+            {% for message in messages %}
+                {% if message.tags == "error"%}
+                    <div class="alert alert-danger">{{ message }}</div>
+                {% else %}
+                    <div class="alert alert-success">{{ message }}</div>
+                {% endif %}
+            {% endfor %}
+        {% endif %}
+
+        <form id="conductorForm" action="{% url 'registrarConductores' %}" method="POST">
+            {% csrf_token %}
+            <div class="mb-3">
+                {{ form.rut.label_tag }}
+                {% render_field form.rut class="form-control" placeholder="Ej: 12345678-9" minlength="10" maxlength="10" %}
+                {{form.rut.errors}}
+            </div>
+            <div class="mb-3">
+                {{ form.nombre.label_tag }}
+                {% render_field form.nombre class="form-control" maxlength="30" %}
+                {{form.nombre.errors}}
+            </div>
+            <div class="mb-3">
+                {{ form.apellido.label_tag }}
+                {% render_field form.apellido class="form-control" maxlength="30" %}
+                {{form.apellido.errors}}
+            </div>
+            <div class="mb-3">
+                {{ form.fechaNacimiento.label_tag }}
+                {% render_field form.fechaNacimiento class="form-control" type="date" %}
+                {{form.fechaNacimiento.errors}}
+            </div>
+            <div class="mb-3">
+                {{ form.direccion.label_tag }}
+                {% render_field form.direccion class="form-control" maxlength="100" %}
+                {{form.direccion.errors}}
+            </div>
+            <div class="mb-3">
+                {{ form.licencia.label_tag }}
+                {% render_field form.licencia class="form-control" placeholder="Ej:12345678-9" minlength="10" maxlength="10" %}
+                {{form.licencia.errors}}
+            </div>
+        </form>
+    {% endblock %}
+
+    {% block gestion_after %}
+        <h5>Listado De Conductores</h5>
+        <div class="table responsive py-2">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Rut</th>
+                        <th>Nombre</th>
+                        <th>Apellido</th>
+                        <th>Fecha Nacimiento</th>
+                        <th>Direccion</th>
+                        <th>Numero Licencia</th>
+                        <th colspan="2">Opciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for conductor in conductores %}
+                        <tr>
+                            <td>{{conductor.conductorID}}</td>
+                            <td>{{conductor.rut}}</td>
+                            <td>{{conductor.nombre}}</td>
+                            <td>{{conductor.apellido}}</td>
+                            <td>{{conductor.fechaNacimiento}}</td>
+                            <td>{{conductor.direccion}}</td>
+                            <td>{{conductor.licencia}}</td>
+                            <td><a href="{% url 'editarConductores' conductor.conductorID %}" class="btn btn-sm btn-outline-primary">Editar</a></td>
+                            <td><a href="{% url 'eliminarConductores' conductor.conductorID %}" class="btn btn-sm btn-outline-danger btnEliminacion">Eliminar</a></td>
+                        </tr>
+                    {% empty %}
+                        <tr><td colspan="9">No conductores encontrados.</td></tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% endblock %}
+
+    <ul class="nav flex-column">
+    <li class="nav-item mb-2"><a class="nav-link" href="{% url 'home' %}">Home</a></li>
+    </ul>
